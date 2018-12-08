@@ -35,6 +35,7 @@ public class AudioViz2 : MonoBehaviour {
             cube = GameObject.Instantiate<GameObject>(prefab);
             cube.transform.SetPositionAndRotation(p, q);
             cube.transform.parent = this.transform;
+            AssignBands(cube, i);
 
             /*
             cube.GetComponent<Renderer>().material.color = Color.HSVToRGB(
@@ -56,4 +57,17 @@ public class AudioViz2 : MonoBehaviour {
             //elements[i].transform.localScale = ls;
         }
 	}
+
+    void AssignBands(GameObject cube, int band)
+    {
+        foreach (Dance d in cube.GetComponentsInChildren<Dance>())
+        {
+            d.band = band;
+        }
+
+        foreach (ColorBand b in cube.GetComponentsInChildren<ColorBand>())
+        {
+            b.band = band;
+        }
+    }
 }
