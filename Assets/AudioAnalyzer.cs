@@ -43,7 +43,10 @@ public class AudioAnalyzer : MonoBehaviour {
             {
                 maxBands[i] = rawBands[i];                
             }
-            bands[i] = rawBands[i] / maxBands[i];
+            if (Time.timeSinceLevelLoad > 0.5f)
+            {
+                bands[i] = rawBands[i] / maxBands[i];
+            }
         }
         
     }

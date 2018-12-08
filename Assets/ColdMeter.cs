@@ -16,10 +16,11 @@ public class ColdMeter : MonoBehaviour {
 
     public float thaw = 0.03f;
 
+    public TextMesh text;
+
     // Use this for initialization
     void Start () {
         StartCoroutine(TrackSpeed());
-        coldness = 1;
 	}
 
     IEnumerator TrackSpeed()
@@ -57,14 +58,44 @@ public class ColdMeter : MonoBehaviour {
                 }
 
             }
-            coldness += (leftSpeed + rightSpeed) / 2000;
+            coldness += (leftSpeed + rightSpeed) / 3000;
             yield return null;
         }
     }
     // Update is called once per frame
 	void Update () {
-        transform.localScale = new Vector3(coldness, coldness, coldness);
+        int count = transform.childCount;
+        for (int i = 0; i < count; i++)
+        {
+            transform.GetChild(i).localScale = new Vector3(coldness, coldness, coldness);
+        }
 
-        coldness -= thaw * Time.deltaTime;
+        if (leftSpeed < 0.1f && rightSpeed < 0.1f)
+        {
+            coldness -= thaw * Time.deltaTime;
+        }
+
+        if (coldness <= 0)
+        {
+            text.text = "The snowman melted! You are are terrible dancer! Press SPACE to Restart";
+            FindObjectOfType<AudioSource>().Stop();
+            coldness = 0;
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
+            {
+                text.text = "Save the Snowpeople! Rave To Summon the cold!";
+                FindObjectOfType<AudioSource>().Play();
+                coldness = 2;
+            }
+
+        }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        if (coldness > 3)
+        {
+            coldness = 3;
+        }
 	}
 }

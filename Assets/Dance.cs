@@ -24,10 +24,17 @@ public class Dance : MonoBehaviour {
         lerpedTheta = Mathf.Lerp(lerpedTheta, theta, Time.deltaTime);
         theta += frequency * Time.deltaTime * Mathf.PI * 2.0f;
         */
+        transform.localRotation = Quaternion.AngleAxis(lerpedAngle, Vector3.right);
+        lerpedAngle = Mathf.Lerp(lerpedAngle, BGE.Forms.Utilities.Map(AudioAnalyzer.bands[band], 0, 1, -1, 1) * amplitude, Time.deltaTime * 10.0f);
+
+        transform.localRotation = Quaternion.AngleAxis(lerpedAngle, Vector3.right);
+
+        /*
         transform.localRotation = Quaternion.AngleAxis(
             Mathf.Sin(theta) * amplitude, axis);
         theta += frequency * Time.deltaTime * Mathf.PI * 2.0f * AudioAnalyzer.bands[band] * 10;
+        */
     }
-
+    float lerpedAngle = 0;
     float lerpedBand = 0;
 }
