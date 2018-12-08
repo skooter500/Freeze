@@ -16,11 +16,15 @@ public class AudioAnalyzer : MonoBehaviour {
 
     public static int frameSize = 512;
     public static float[] spectrum;
-    public static float[] bands;
 
+
+    public static float[] bands;
+    public static float[] maxBands;
+    public static float[] rawBands;
+    
     public float binWidth;
     public float sampleRate;
-    
+
     /*
      * 20-60 - Subbase
      * 60-250 - Bass
@@ -31,12 +35,27 @@ public class AudioAnalyzer : MonoBehaviour {
      * 6Khz - 20Khz - Brilliance
      */
 
+    void NormalizeBands()
+    {
+        for (int i = 0; i < bands.Length; i++)
+        {
+            if (rawBands[i] > maxBands[i])
+            {
+                maxBands[i] = rawBands[i];                
+            }
+            bands[i] = rawBands[i] / maxBands[i];
+        }
+        
+    }
+
     private void Awake()
     {
         a = GetComponent<AudioSource>();
         spectrum = new float[frameSize];
-        bands = new float[(int) Mathf.Log(frameSize, 2)];
-        
+        rawBands = new float[(int)Mathf.Log(frameSize, 2)];
+        bands = new float[(int)Mathf.Log(frameSize, 2)];
+        maxBands = new float[(int)Mathf.Log(frameSize, 2)];
+
         if (useMic)
         {
             if (Microphone.devices.Length > 0)
@@ -114,7 +133,7 @@ public class AudioAnalyzer : MonoBehaviour {
                 average += spectrum[j] * (j + 1);
             }
             average /= (float) width;
-            bands[i] = average;
+            rawBands[i] = average;
             //Debug.Log(i + "\t" + start + "\t" + end + "\t" + start * binWidth + "\t" + (end * binWidth));
         }
 
@@ -125,5 +144,6 @@ public class AudioAnalyzer : MonoBehaviour {
     void Update () {
         a.GetSpectrumData(spectrum, 0, FFTWindow.Blackman);
         GetFrequencyBands();
+        NormalizeBands();
     }
 }

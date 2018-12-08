@@ -26,9 +26,7 @@ public class Dance : MonoBehaviour {
         */
         transform.localRotation = Quaternion.AngleAxis(
             Mathf.Sin(theta) * amplitude, axis);
-        lerpedBand = Mathf.Lerp(lerpedBand, AudioAnalyzer.bands[band], Time.deltaTime * 20);
-        Debug.Log(lerpedBand);
-        theta += frequency * Time.deltaTime * Mathf.PI * 2.0f * (lerpedBand * 5);
+        theta += frequency * Time.deltaTime * Mathf.PI * 2.0f * AudioAnalyzer.bands[band] * 10;
     }
 
     float lerpedBand = 0;

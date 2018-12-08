@@ -14,7 +14,6 @@ public class ColorBand : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         c = Mathf.Lerp(c, AudioAnalyzer.bands[band] * 2, Time.deltaTime * 5);
-        Debug.Log(c);
         r.material.color = Color.HSVToRGB(
             c 
             , 1, 1);
